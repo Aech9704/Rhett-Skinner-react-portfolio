@@ -34,7 +34,7 @@ export default class PoertflolioManager extends Component {
 
 getPortfolioItems() {
     axios
-    .get('https://rhettskinner.devcamp.space/portfolio/portfolio_items')
+    .get('https://rhettskinner.devcamp.space/portfolio/portfolio_items?order_by=created_at&direction=desc')
     .then(responce => {
         this.setState({
             portfolioItems: [...responce.data.portfolio_items]
