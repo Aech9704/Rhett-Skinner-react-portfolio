@@ -14,7 +14,7 @@ export default class PortfolioContainer extends Component {
     };
 
     this.handleFilter = this.handleFilter.bind(this);
-    this.getPoertfolioItems =  this.getPoertfolioItems.bind(this);
+    this.getPortfolioItems =  this.getPortfolioItems.bind(this);
   }
 
 handleFilter(filter) {
@@ -25,7 +25,7 @@ handleFilter(filter) {
     })
 }
 
-getPoertfolioItems() {
+getPortfolioItems() {
   axios
     .get('https://rhettskinner.devcamp.space/portfolio/portfolio_items')
     .then(response => {
@@ -45,7 +45,7 @@ portfolioItems() {
 }
 
   componentDidMount() {
-    this.getPoertfolioItems();
+    this.getPortfolioItems();
   }
 
   render() {
