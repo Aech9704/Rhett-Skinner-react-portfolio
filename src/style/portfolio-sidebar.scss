@@ -11,3 +11,32 @@
       }
     }
   }
+
+.list-info-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  color: $offwhite;
+  
+  .list-title {
+    margin: 0px;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .action{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 15px;
+
+    .list-action{
+      font-size: 1.5rem;
+      transition: .5s ease-in-out;
+  
+      &:hover{
+        cursor: pointer;
+        color:$warning;
+      }
+    }
+  }
+}
