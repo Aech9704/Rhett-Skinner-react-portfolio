@@ -21,7 +21,7 @@ handleUnsuccessfulAuth() {
 
   render() {
     return (
-      <div className="auth-page-wrapper">
+      <div className="side-by-side-wrapper">
         <div
           className="left-column"
           style={{

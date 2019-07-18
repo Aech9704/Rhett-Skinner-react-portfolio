@@ -5,26 +5,26 @@ import{
   Route
 } from 'react-router-dom'
 import axios from 'axios';
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faSignOutAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
-
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import NavigationContainer from "./navigation/navigation-container";
 import Home from "./pages/home";
 import About from "./pages/about";
 import contact from "./pages/contact";
-import blog from "./pages/blog";
+import Blog from "./pages/blog";
+import blogDetail from "./pages/blog-detail";
 import PortfolioManager from "./pages/portfolio-manager.js";
 import PortfolioDetail from "./portfolio/portfolioDetail";
 import Auth from "./pages/auth";
 import NoMatch from "./pages/no-match";
-
-library.add(faTrash, faSignOutAlt, faEdit);
+import Icons from "../helpers/icons"
+import BlogDetail from "./pages/blog-detail";
 
 export default class App extends Component {
   constructor(props) {
     super(props);
+
+    Icons();
 
     this.state = {
       loggedInStatus:"NOT_LOGGED_IN"
@@ -54,7 +54,6 @@ export default class App extends Component {
     });
   }
 
-
   cheackLoginStatus() {
     return axios.get("https://api.devcamp.space/logged_in", {
       withCredentials: true
@@ -62,10 +61,6 @@ export default class App extends Component {
       .then(response => {
         const loggedIn = response.data.logged_in;
         const loggedInStatus = this.state.loggedInStatus;
-
-        // If loggedIn and status LOGGED_IN => return data
-        // if loggedIn  status NOT_LOOGED_IN => update state
-        // if not loggedIn Status LOGGED_IN => update state
 
         if (loggedIn && loggedInStatus === "LOGGED_IN") {
           return loggedIn;
@@ -114,17 +109,35 @@ export default class App extends Component {
                 path="/auth" 
                 render={props => (
                   <Auth
-                    {...props}
-                    handleSuccessfulLogin={this.handleSuccessfulLogin}
-                    handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
+                      {...props}
+                      handleSuccessfulLogin={this.handleSuccessfulLogin}
+                      handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
                   />
                 )} 
               />
 
-
               <Route path="/about-me" component={About} />
               <Route path="/contact" component={contact} />
-              <Route path="/blog" component={blog} />
+
+              <Route path="/blog"
+                render={props => (
+                   <Blog 
+                      {...props}
+                      loggedInStatus={this.state.loggedInStatus}
+                   />
+                )}
+              />
+
+              <Route
+                path="/b/:slug"
+                render={props => (
+                  <BlogDetail
+                    {...props}
+                    loggedInStatus={this.state.loggedInStatus}
+                  />
+                )}
+              />
+
               <Route exact path="/portfolio/:slug" component={PortfolioDetail} />
               {this.state.loggedInStatus === "LOGGED_IN" ? (this.authorizedPages()) : null}
               <Route component={NoMatch} />

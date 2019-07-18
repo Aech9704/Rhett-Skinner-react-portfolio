@@ -1,16 +1,59 @@
-.auth-page-wrapper{
+.side-by-side-wrapper{
     display: grid;
     grid-template-columns: 1fr 1fr;
     height: calc(100vh - 84px);
 
     .left-column{
         background-size: cover;
+        left: 0;
     }
 
     .right-column{
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         background-color: $offwhite;
+
+        .auth-form-wrapper {
+            @include input-element();
+            @include base-grid();
+            // @include base-btn();
+            margin: 0px 30px;
+
+
+        }
+
+        .contact {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: unset;
+
+            .text-contact {
+                color: black;
+                padding-left: 30px;
+                font-size: 1rem;
+            }
+
+            .icon{
+                padding-bottom: 50px;
+                color: $teal;
+                transition: 0.5s ease-in-out;
+                font-size: 1.5rem;
+
+                &:hover {
+                    color: $dark-teal
+                }
+            }
+        }
+
+        .title {
+            padding: 50px 0px; 
+        }
+
+        .padding {
+            padding: 0px 50px;
+        }
     }
 }

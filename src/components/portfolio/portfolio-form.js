@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import DropzoneComponent from "react-dropzone-component";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "../../../node_modules/react-dropzone-component/styles/filepicker.css";
 import "../../../node_modules/dropzone/dist/min/dropzone.min.css";
@@ -38,7 +39,16 @@ export default class PortfolioForm extends Component {
   }
 
   deleteImage(imageType) {
-      console.log("this.deleteImage", imageType)
+    axios.delete(`https://api.devcamp.space/portfolio/delete-portfolio-image/${this.state
+    .id}?image_type=${imageType}`,
+     { withCredentials: true }
+     ).then(response => {
+       this.setState({
+         [`${imageType}_url`]: ""
+       })
+     }).catch(error => {
+       console.log("delete image", error)
+     })
   }
 
   componentDidUpdate() {
@@ -67,9 +77,9 @@ export default class PortfolioForm extends Component {
         editMode: true,
         apiUrl: `https://rhettskinner.devcamp.space/portfolio/portfolio_items/${id}`,
         apiAction: "patch",
-        thumb_image: thumb_image_url || "",
-        banner_image: banner_image_url || "",
-        logo: logo_url || "",
+        thumb_image_url : thumb_image_url || "",
+        banner_image_url: banner_image_url || "",
+        logo_url: logo_url || "",
       });
     }
   }
@@ -107,7 +117,9 @@ export default class PortfolioForm extends Component {
     };
   }
 
-  buildForm() {
+  buildForm(){
+        
+    
     let formData = new FormData();
 
     formData.append("portfolio_item[name]", this.state.name);
@@ -115,21 +127,18 @@ export default class PortfolioForm extends Component {
     formData.append("portfolio_item[url]", this.state.url);
     formData.append("portfolio_item[category]", this.state.category);
     formData.append("portfolio_item[position]", this.state.position);
-
-    if (this.state.thumb_image) {
-      formData.append("portfolio_item[thumb_image]", this.state.thumb_image);
+    if(this.state.thumb_image){
+        formData.append("portfolio_item[thumb_image]", this.state.thumb_image);
     }
-
-    if (this.state.banner_image) {
-      formData.append("portfolio_item[banner_image]", this.state.banner_image);
+    if(this.state.banner_image){
+        formData.append("portfolio_item[banner_image]", this.state.banner_image);
     }
-
-    if (this.state.logo) {
-      formData.append("portfolio_item[logo]", this.state.logo);
+    if(this.state.logo){
+        formData.append("portfolio_item[logo]", this.state.logo);
     }
 
     return formData;
-  }
+}
 
   handleChange(event) {
     this.setState({
@@ -138,20 +147,20 @@ export default class PortfolioForm extends Component {
   }
 
   handleSubmit(event) {
-    debugger;
+
     axios({
-        method: this.state.apiAction,
-        url: this.state.apiUrl,
-        data: this.buildForm(),
-        withCredentials: true
-      })
-      .then(response => {
+      method: this.state.apiAction,
+      url: this.state.apiUrl,
+      data: this.buildForm(),
+      withCredentials: true
+  })
+  .then(response =>{
         if(this.state.editMode){
             this.props.handleEditFormSubmission();
         } else{
             this.props.handleNewFormSubmission(response.data.portfolio_item);
         }
-
+      
         this.setState({
           name: "",
           description: "",
@@ -162,8 +171,8 @@ export default class PortfolioForm extends Component {
           banner_image: "",
           logo: "",
           editMode: false,
-            apiUrl: "https://rhettskinner.devcamp.space/portfolio/portfolio_items",
-            apiAction: "post"
+          apiUrl: "https://rhettskinner.devcamp.space/portfolio/portfolio_items",
+          apiAction: "post"
         });
 
         [this.thumbRef, this.bannerRef, this.logoRef].forEach(ref => {
@@ -171,6 +180,7 @@ export default class PortfolioForm extends Component {
         });
       })
       .catch(error => {
+   
         console.log("portfolio form handleSubmit error", error);
       });
 
@@ -231,13 +241,13 @@ export default class PortfolioForm extends Component {
 
         <div className="image-uploaders">
 
-            {this.state.thumb_image && this.state.editMode ? (
+            {this.state.thumb_image_url && this.state.editMode ? (
                 <div className="portfolio-manager-imager-wrapper">
-                    <img src={this.state.thumb_image} />
+                    <img src={this.state.thumb_image_url} />
 
                     <div className="image-removal-link">
                         <a onClick={() => this.deleteImage("thumb_image")}>
-                            "remove file"
+                          <FontAwesomeIcon icon="minus-square" />
                         </a>
                     </div>
                 </div>
@@ -252,13 +262,13 @@ export default class PortfolioForm extends Component {
                  </DropzoneComponent>
             )}
 
-            {this.state.banner_image && this.state.editMode ? (
+            {this.state.banner_image_url && this.state.editMode ? (
                 <div className="portfolio-manager-imager-wrapper">
-                    <img src={this.state.banner_image} />
+                    <img src={this.state.banner_image_url} />
 
                     <div className="image-removal-link">
                         <a onClick={() => this.deleteImage("banner_image")}>
-                            "remove file"
+                          <FontAwesomeIcon icon="minus-square" /> 
                         </a>
                     </div>
                 </div>
@@ -273,13 +283,13 @@ export default class PortfolioForm extends Component {
                 </DropzoneComponent>
             )}
 
-            {this.state.logo && this.state.editMode ? (
+            {this.state.logo_url && this.state.editMode ? (
                 <div className="portfolio-manager-imager-wrapper">
-                    <img src={this.state.logo} />
+                    <img src={this.state.logo_url} />
 
                     <div className="image-removal-link">
                         <a onClick={() => this.deleteImage("logo")}>
-                            "remove file"
+                          <FontAwesomeIcon icon="minus-square" />
                         </a>
                     </div>
                 </div>
